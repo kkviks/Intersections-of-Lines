@@ -19,9 +19,9 @@ public:
 	}
 
 	/// <summary>
-	/// Function to insert a value into the event queue.
+	/// Function to insert a data into the event queue.
 	/// </summary>
-	/// <param name="val">The value to be inserted into the event queue.</param>
+	/// <param name="data">The data to be inserted into the event queue.</param>
 	void insert(T val) {
 		tree->insert(val);
 	}
@@ -31,11 +31,11 @@ public:
 	/// </summary>
 	/// <returns>The highest priority element in the event queue.</returns>
 	T top() {
-		AVLNode<T>* temp = tree->getRoot();  // get the root of the current tree 
-		while (temp->left) {    //traverse to the left node until the next pointer is not NULL
-			temp = temp->left;
+		Node<T>* temp = tree->getRoot();  // get the root of the current tree
+		while (temp->leftChild) {    //traverse to the leftChild node until the next pointer is not NULL
+			temp = temp->leftChild;
 		}
-		return temp->val;   // return the value of the leftmost element in the AVL tree
+		return temp->data;   // return the data of the leftmost element in the AVL tree
 	}
 
 	/// <summary>

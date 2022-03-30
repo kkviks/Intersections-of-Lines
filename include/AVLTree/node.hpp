@@ -3,28 +3,28 @@ template <class T>
 /// Defines the structure of an AVL Tree Node.
 /// </summary>
 /// <typeparam name="T">A template class.</typeparam>
-class AVLNode {
+class Node {
 public:
 	/// <summary>
-	/// Stores the value of the node.
+	/// Stores the data of the node.
 	/// </summary>
-	T val;
+	T data;
 	/// <summary>
-	/// Pointer to the left child of the node.
+	/// Pointer to the leftChild child of the node.
 	/// </summary>
-	AVLNode* left;
+	Node* leftChild;
 	/// <summary>
-	/// Pointer to the right child of the node.
+	/// Pointer to the rightChild child of the node.
 	/// </summary>
-	AVLNode* right;
+	Node* rightChild;
 
 	/// <summary>
 	/// Constructor to initialize the AVL Tree Node.
 	/// </summary>
-	/// <param name="val">The value of the node being initialized.</param>
-	AVLNode(T val) {
-		this->val = val;
-		this->left = nullptr;
-		this->right = nullptr;
+	/// <param name="data">The data of the node being initialized.</param>
+	Node(T value) {
+		this->data = value;
+		this->leftChild = nullptr;
+		this->rightChild = nullptr;
 	}
 };

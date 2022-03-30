@@ -6,24 +6,29 @@
 #include <cmath>
 
 //// <summary>
-/// Defines the structure of a point in a plane.
+/// Class modeling point of coordinate geometry
 /// </summary>
 struct Point {
-
+public:
     /// <summary>
     /// X co-ordinate of the point.
     /// </summary>
-    double x;
+    float x;
     /// <summary>
     /// Y co-ordinate of the point.
     /// </summary>
-    double y;
+    float y;
+
+    /// <summary>
+    /// Delta data for float comparison
+    /// </summary>
+    static inline float eps = 10e-5;
 
     /// <summary>
     /// Default constructor to initialize the point to infinity.
     /// </summary>
     Point() {
-        x = y = INT_MAX;
+        x = y = FLT_MAX;
     }
 
     /// <summary>
@@ -31,7 +36,7 @@ struct Point {
     /// </summary>
     /// <param name="x">X co-ordinate of the point.</param>
     /// <param name="y">Y co-ordinate of the point.</param>
-    Point(double x, double y) {
+    Point(float x, float y) {
         this->x = x;
         this->y = y;
     }
@@ -39,80 +44,44 @@ struct Point {
     /// <summary>
     /// Overloading the <= operator.
     /// </summary>
-    /// <param name="p2"></param>
+    /// <param name="p_2"></param>
     /// <returns></returns>
-    bool operator <= (Point const& p2) {
-        if (abs(y - p2.y) < 10e-5) {
-
-            if (abs(x - p2.x) < 10e-5)
-                return true;
-            else
-                return x < p2.x;
-        }
-        else
-            return y > p2.y;
-    }
+    bool operator <= (Point const& p2);
 
     /// <summary>
     /// Overloading the >= operator.
     /// </summary>
-    /// <param name="p2"></param>
+    /// <param name="p_2"></param>
     /// <returns></returns>
-    bool operator >= (Point const& p2) {
-        if (abs(y - p2.y) < 10e-5) {
-
-            if (abs(x - p2.x) < 10e-5)
-                return true;
-            else
-                return x > p2.x;
-        }
-        else
-            return y < p2.y;
-    }
+    bool operator >= (Point const& p2);
 
     /// <summary>
     /// Overloading the < operator.
     /// </summary>
-    /// <param name="p2"></param>
+    /// <param name="p_2"></param>
     /// <returns></returns>
-    bool operator < (Point const& p2) {
-        if (abs(y - p2.y) < 10e-5) {
-            return x < p2.x;
-        }
-        else
-            return y > p2.y;
-    }
+    bool operator < (Point const& p2);
 
     /// <summary>
     /// Overloading the > operator.
     /// </summary>
-    /// <param name="p2"></param>
+    /// <param name="p_2"></param>
     /// <returns></returns>
-    bool operator > (Point const& p2) {
-        if (abs(y - p2.y) < 10e-5) {
-            return x > p2.x;
-        }
-        else
-            return y < p2.y;
-    }
+    bool operator > (Point const& p2);
 
     /// <summary>
     /// Overloading the == operator.
     /// </summary>
-    /// <param name="p2"></param>
+    /// <param name="p_2"></param>
     /// <returns></returns>
-    bool operator == (Point const& p2) {
-        return (abs(x - p2.x) < 10e-5 && abs(y - p2.y) < 10e-5);
-    }
+    bool operator == (Point const& p2);
 
     /// <summary>
     /// Overloading the != operator.
     /// </summary>
-    /// <param name="p2"></param>
+    /// <param name="p_2"></param>
     /// <returns></returns>
-    bool operator != (Point const& p2) {
-        return !(abs(x - p2.x) < 10e-5 && abs(y - p2.y) < 10e-5);
-    }
+    bool operator != (Point const& p2);
 
     /// <summary>
     /// Overloading the << operator to make the structure compatible with std::cout.
@@ -124,3 +93,53 @@ struct Point {
         return os << "(" << p.x << ", " << p.y << ")";
     }
 };
+
+bool Point:: operator <= (Point const& p2) {
+    if (abs(y - p2.y) < eps) {
+
+        if (abs(x - p2.x) < eps)
+            return true;
+        else
+            return x < p2.x;
+    }
+    else
+        return y > p2.y;
+}
+
+bool Point:: operator >= (Point const& p2) {
+    if (abs(y - p2.y) < eps) {
+
+        if (abs(x - p2.x) < eps)
+            return true;
+        else
+            return x > p2.x;
+    }
+    else
+        return y < p2.y;
+}
+
+bool Point:: operator < (Point const& p2) {
+    if (abs(y - p2.y) < eps) {
+        return x < p2.x;
+    }
+    else
+        return y > p2.y;
+}
+
+bool Point::operator > (Point const& p2) {
+    if (abs(y - p2.y) < eps) {
+        return x > p2.x;
+    }
+    else
+        return y < p2.y;
+}
+
+bool Point::operator == (Point const& p2) {
+    return (abs(x - p2.x) < eps && abs(y - p2.y) < eps);
+}
+
+bool Point:: operator != (Point const& p2) {
+    return !(abs(x - p2.x) < eps && abs(y - p2.y) < eps);
+}
+
+

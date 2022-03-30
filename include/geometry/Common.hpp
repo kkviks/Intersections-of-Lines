@@ -10,28 +10,27 @@
 
 using namespace std;
 
-
 //// <summary>
 /// Defines a structure to store the line segments having lower / upper endpoints at a particular point.
 /// </summary>
-struct LUData {
+struct Common {
     /// <summary>
     /// The point for which we will be storing the line segments having it as an lower / upper endpoint.
     /// </summary>
-    Point key;
+    Point commonPoint;
     /// <summary>
     /// Vector to store all the line segments.
     /// </summary>
-    std::vector<Segment> list;
+    vector<Segment> segments;
 
-    LUData() {}
+    Common() {}
 
     /// <summary>
-    /// Constructor to initialize the LUData structure.
+    /// Constructor to initialize the Common structure.
     /// </summary>
-    /// <param name="key">The point for which this structure is storing the line segments.</param>
-    LUData(Point key) {
-        this->key = key;
+    /// <param name="commonPoint">The point for which this structure is storing the line segments.</param>
+    Common(Point point) {
+        this->commonPoint = point;
     }
 
     /// <summary>
@@ -39,54 +38,42 @@ struct LUData {
     /// </summary>
     /// <param name="t2"></param>
     /// <returns></returns>
-    bool operator < (LUData const& t2) {
-        return key < t2.key;
-    }
+    bool operator < (Common const& t2);
 
     /// <summary>
     /// Overloading the <= operator.
     /// </summary>
     /// <param name="t2"></param>
     /// <returns></returns>
-    bool operator <= (LUData const& t2) {
-        return key <= t2.key;
-    }
+    bool operator <= (Common const& t2);
 
     /// <summary>
     /// Overloading the > operator.
     /// </summary>
     /// <param name="t2"></param>
     /// <returns></returns>
-    bool operator > (LUData const& t2) {
-        return key > t2.key;
-    }
+    bool operator > (Common const& t2);
 
     /// <summary>
     /// Overloading the >= operator.
     /// </summary>
     /// <param name="t2"></param>
     /// <returns></returns>
-    bool operator >= (LUData const& t2) {
-        return key >= t2.key;
-    }
+    bool operator >= (Common const& t2);
 
     /// <summary>
     /// Overloading the == operator.
     /// </summary>
     /// <param name="t2"></param>
     /// <returns></returns>
-    bool operator == (LUData const& t2) {
-        return key == t2.key;
-    }
+    bool operator == (Common const& t2);
 
     /// <summary>
     /// Overloading the != operator.
     /// </summary>
     /// <param name="t2"></param>
     /// <returns></returns>
-    bool operator != (LUData const& t2) {
-        return key != t2.key;
-    }
+    bool operator != (Common const& t2);
 
     /// <summary>
     /// Overloading the << operator to make the structure compatible with std::cout.
@@ -94,15 +81,42 @@ struct LUData {
     /// <param name="os"></param>
     /// <param name="t"></param>
     /// <returns></returns>
-    friend std::ostream& operator<<(std::ostream& os, LUData const& t) {
-        os << t.key;
+    friend std::ostream& operator<<(std::ostream& os, Common const& t) {
+        os << t.commonPoint;
         os << '[';
-        for (unsigned int i = 0; i < t.list.size(); i++) {
-            os << t.list[i];
-            if (i != t.list.size() - 1)
+        for (unsigned int i = 0; i < t.segments.size(); i++) {
+            os << t.segments[i];
+            if (i != t.segments.size() - 1)
                 os << ", ";
         }
         os << "]\n";
         return os;
     }
 };
+
+
+bool Common::operator < (Common const& t2) {
+    return commonPoint < t2.commonPoint;
+}
+
+
+bool Common::operator <= (Common const& t2) {
+    return commonPoint <= t2.commonPoint;
+}
+
+bool Common::operator > (Common const& t2) {
+    return commonPoint > t2.commonPoint;
+}
+
+bool Common::operator >= (Common const& t2) {
+    return commonPoint >= t2.commonPoint;
+}
+
+bool Common::operator == (Common const& t2) {
+    return commonPoint == t2.commonPoint;
+}
+
+bool Common::operator != (Common const& t2) {
+    return commonPoint != t2.commonPoint;
+}
+

@@ -6,7 +6,7 @@
 #include "./include/geometry/point.hpp"
 #include "./include/geometry/segment.hpp"
 #include "./include/geometry/helpers.hpp"
-#include "./include/geometry/LUData.hpp"
+#include "./include/geometry/Common.hpp"
 
 #include "./include/AVLTree/tree.hpp"
 
@@ -32,15 +32,15 @@ EventQueue<Point> eq;
 /// <summary>
 /// Creating an AVL Tree to store all the line segments that have a particular point as it's lower point.
 /// </summary>
-AVLTree<LUData> L;
+AVLTree<Common> L;
 /// <summary>
 /// Creating an AVL Tree to store all the line segments that have a particular point as it's upper point.
 /// </summary>
-AVLTree<LUData> U;
+AVLTree<Common> U;
 /// <summary>
 /// Creating an AVL Tree to store all the line segments that have a particular point containing a line segment.
 /// </summary>
-AVLTree<LUData> C;
+AVLTree<Common> C;
 /// <summary>
 /// Creating an AVL Tree to store all the intersection points of the line segments.
 /// </summary>
@@ -58,23 +58,23 @@ Status T;
 /// <param name="p">The event point being processed.</param>
 void findNewEvent(Segment s1, Segment s2, Point p) {
 
-	Point temp = intersection(s1.p1, s1.p2, s2.p1, s2.p2);
+	Point temp = intersection(s1.p_1, s1.p_2, s2.p_1, s2.p_2);
 
-	if (!doIntersect(s1.p1, s1.p2, s2.p1, s2.p2))
+	if (!doIntersect(s1.p_1, s1.p_2, s2.p_1, s2.p_2))
 		return;
 	else if (temp.y < p.y || (abs(temp.y - Segment::k) < 10e-5 && temp.x > p.x)) {
 		eq.insert(temp);
 
-		LUData t;
-		t.key = temp;
-		t.list.push_back(s1);
-		t.list.push_back(s2);
+		Common t;
+		t.commonPoint = temp;
+		t.segments.push_back(s1);
+		t.segments.push_back(s2);
 
 		auto t2 = C.search(t);
 
 		if (t2) {
-			t2->val.list.push_back(s1);
-			t2->val.list.push_back(s2);
+			t2->data.segments.push_back(s1);
+			t2->data.segments.push_back(s2);
 		}
 		else
 			C.insert(t);
@@ -87,24 +87,24 @@ void findNewEvent(Segment s1, Segment s2, Point p) {
 /// <param name="p">The event point.</param>
 void handleEvent(Point& p) {
 
-	AVLNode<LUData>* u = U.search(p);
-	AVLNode<LUData>* l = L.search(p);
-	AVLNode<LUData>* c = C.search(p);
+	Node<Common>* u = U.search(p);
+	Node<Common>* l = L.search(p);
+	Node<Common>* c = C.search(p);
 	Status union_;
 	union_.clear();
 
 	if (u)
-		for (Segment& s : u->val.list)
+		for (Segment& s : u->data.segments)
 			union_.insert(s);
 	if (l)
-		for (Segment& s : l->val.list)
+		for (Segment& s : l->data.segments)
 			union_.insert(s);
 	if (c)
-		for (Segment& s : c->val.list)
+		for (Segment& s : c->data.segments)
 			union_.insert(s);
 
 	if (union_.getRoot())
-		if (union_.getRoot()->left || union_.getRoot()->right) {
+		if (union_.getRoot()->leftChild || union_.getRoot()->rightChild) {
 			if (!finalAns.search(p))
 				outputFile << p.x << ' ' << p.y << '\n';
 			finalAns.insert(p);
@@ -113,29 +113,29 @@ void handleEvent(Point& p) {
 	union_.clear();
 
 	if (l)
-		for (Segment& s : l->val.list)
+		for (Segment& s : l->data.segments)
 			union_.insert(s);
 	if (c)
-		for (Segment& s : c->val.list)
+		for (Segment& s : c->data.segments)
 			union_.insert(s);
 
 	T.difference(union_);
 	Segment::k = p.y - (2 * 10e-5);
 
 	if (u)
-		for (Segment& s : u->val.list)
+		for (Segment& s : u->data.segments)
 			T.insert(s);
 	if (c)
-		for (Segment& s : c->val.list)
+		for (Segment& s : c->data.segments)
 			T.insert(s);
 
 	union_.clear();
 
 	if (u)
-		for (Segment& s : u->val.list)
+		for (Segment& s : u->data.segments)
 			union_.insert(s);
 	if (c)
-		for (Segment& s : c->val.list)
+		for (Segment& s : c->data.segments)
 			union_.insert(s);
 
 	if (!union_.getRoot()) {
@@ -178,45 +178,45 @@ int main() {
 
 		Segment s(p1, p2);
 
-		LUData t;
+		Common t;
 
 		if (p1 > p2) {
-			t.key = p1;
-			t.list.push_back(s);
+			t.commonPoint = p1;
+			t.segments.push_back(s);
 
-			AVLNode<LUData>* temp = L.search(t);
+			Node<Common>* temp = L.search(t);
 
 			if (temp)
-				temp->val.list.push_back(s);
+				temp->data.segments.push_back(s);
 			else
 				L.insert(t);
 
-			t.key = p2;
+			t.commonPoint = p2;
 
 			temp = U.search(t);
 
 			if (temp)
-				temp->val.list.push_back(s);
+				temp->data.segments.push_back(s);
 			else
 				U.insert(t);
 		}
 		else {
-			t.key = p2;
-			t.list.push_back(s);
+			t.commonPoint = p2;
+			t.segments.push_back(s);
 
-			AVLNode<LUData>* temp = L.search(t);
+			Node<Common>* temp = L.search(t);
 
 			if (temp)
-				temp->val.list.push_back(s);
+				temp->data.segments.push_back(s);
 			else
 				L.insert(t);
 
-			t.key = p1;
+			t.commonPoint = p1;
 
 			temp = U.search(t);
 
 			if (temp)
-				temp->val.list.push_back(s);
+				temp->data.segments.push_back(s);
 			else
 				U.insert(t);
 		}
@@ -246,6 +246,6 @@ int main() {
 	inputFile.close();
 	outputFile.close();
 
-	system("python plotter.py");
+	//system("python plotter.py");
 	return 0;
 }

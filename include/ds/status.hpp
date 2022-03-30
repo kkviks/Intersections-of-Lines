@@ -9,98 +9,98 @@ class Status : public AVLTree<Segment> {
 private:
 
 	/// <summary>
-	/// Function to find the left neighbour line segment of a point.
+	/// Function to find the leftChild neighbour line segment of a point.
 	/// </summary>
 	/// <param name="root">The root node of the Status.</param>
 	/// <param name="p">The point.</param>
-	/// <param name="s">The line segment object whose value will be changed to the answer.</param>
-	void findLeftNeighbour(AVLNode<Segment>* root, Point& p, Segment& s) {
+	/// <param name="s">The line segment object whose data will be changed to the answer.</param>
+	void findLeftNeighbour(Node<Segment>* root, Point& p, Segment& s) {
 
 		if (root == nullptr)
 			return;
-		double x = (p.y - root->val.intercept) / root->val.slope;
+		double x = (p.y - root->data.c) / root->data.m;
 		if (p.x > x) {
-			s = root->val;
-			findLeftNeighbour(root->right, p, s);
+			s = root->data;
+			findLeftNeighbour(root->rightChild, p, s);
 		}
 		else {
-			findLeftNeighbour(root->left, p, s);
+			findLeftNeighbour(root->leftChild, p, s);
 		}
 	}
 
 	/// <summary>
-	/// Function to find the right neighbour line segment of a point.
+	/// Function to find the rightChild neighbour line segment of a point.
 	/// </summary>
 	/// <param name="root">The root node of the Status.</param>
 	/// <param name="p">The point.</param>
-	/// <param name="s">The line segment object whose value will be changed to the answer.</param>
-	void findRightNeighbour(AVLNode<Segment>* root, Point& p, Segment& s) {
+	/// <param name="s">The line segment object whose data will be changed to the answer.</param>
+	void findRightNeighbour(Node<Segment>* root, Point& p, Segment& s) {
 
 		if (root == nullptr)
 			return;
-		double x = (p.y - root->val.intercept) / root->val.slope;
+		double x = (p.y - root->data.c) / root->data.m;
 		if (p.x < x) {
-			s = root->val;
-			findRightNeighbour(root->left, p, s);
+			s = root->data;
+			findRightNeighbour(root->leftChild, p, s);
 		}
 		else {
-			findRightNeighbour(root->right, p, s);
+			findRightNeighbour(root->rightChild, p, s);
 		}
 	}
 
 	/// <summary>
-	/// Function to find the left neighbour segment of a line segment.
+	/// Function to find the leftChild neighbour segment of a line segment.
 	/// </summary>
 	/// <param name="root">The root node of the Status.</param>
 	/// <param name="given">The segment.</param>
-	/// <param name="ans">The line segment object whose value will be changed to the answer.</param>
-	void findLeftNeighbourSegment(AVLNode<Segment>* root, Segment& given, Segment& ans) {
+	/// <param name="ans">The line segment object whose data will be changed to the answer.</param>
+	void findLeftNeighbourSegment(Node<Segment>* root, Segment& given, Segment& ans) {
 
 		if (root == nullptr)
 			return;
 
-		findLeftNeighbourSegment(root->left, given, ans);
+		findLeftNeighbourSegment(root->leftChild, given, ans);
 
-		Segment temp = root->val;
-		double x_t = (Segment::k - temp.intercept) / temp.slope;
-		double x_g = (Segment::k - given.intercept) / given.slope;
+		Segment temp = root->data;
+		double x_t = (Segment::k - temp.c) / temp.m;
+		double x_g = (Segment::k - given.c) / given.m;
 
 		if (x_t < x_g)
 			ans = temp;
 
-		findLeftNeighbourSegment(root->right, given, ans);
+		findLeftNeighbourSegment(root->rightChild, given, ans);
 	}
 
 	/// <summary>
-	/// Function to find the left neighbour segment of a line segment.
+	/// Function to find the leftChild neighbour segment of a line segment.
 	/// </summary>
 	/// <param name="root">The root node of the Status.</param>
 	/// <param name="given">The segment.</param>
-	/// <param name="ans">The line segment object whose value will be changed to the answer.</param>
-	void findRightNeighbourSegment(AVLNode<Segment>* root, Segment& given, Segment& ans) {
+	/// <param name="ans">The line segment object whose data will be changed to the answer.</param>
+	void findRightNeighbourSegment(Node<Segment>* root, Segment& given, Segment& ans) {
 
 		if (root == nullptr)
 			return;
 
-		findRightNeighbourSegment(root->right, given, ans);
+		findRightNeighbourSegment(root->rightChild, given, ans);
 
-		Segment temp = root->val;
-		double x_t = (Segment::k - temp.intercept) / temp.slope;
-		double x_g = (Segment::k - given.intercept) / given.slope;
+		Segment temp = root->data;
+		double x_t = (Segment::k - temp.c) / temp.m;
+		double x_g = (Segment::k - given.c) / given.m;
 
 		if (x_t > x_g)
 			ans = temp;
 
-		findRightNeighbourSegment(root->left, given, ans);
+		findRightNeighbourSegment(root->leftChild, given, ans);
 	}
 
 public:
 
 	/// <summary>
-	/// Helper function to find the left neighbour line segment of a point.
+	/// Helper function to find the leftChild neighbour line segment of a point.
 	/// </summary>
 	/// <param name="p">The point.</param>
-	/// <returns>The left neighbour line segment.</returns>
+	/// <returns>The leftChild neighbour line segment.</returns>
 	Segment leftNeighbourOfPoint(Point& p) {
 		Segment s;
 		findLeftNeighbour(getRoot(), p, s);
@@ -108,10 +108,10 @@ public:
 	}
 
 	/// <summary>
-	/// Helper function to find the right neighbour line segment of a point.
+	/// Helper function to find the rightChild neighbour line segment of a point.
 	/// </summary>
 	/// <param name="p">The point.</param>
-	/// <returns>The right neighbour line segment.</returns>
+	/// <returns>The rightChild neighbour line segment.</returns>
 	Segment rightNeighbourOfPoint(Point& p) {
 		Segment s;
 		findRightNeighbour(getRoot(), p, s);
@@ -119,10 +119,10 @@ public:
 	}
 
 	/// <summary>
-	/// Helper function to find the left neighbour line segment of a line segment.
+	/// Helper function to find the leftChild neighbour line segment of a line segment.
 	/// </summary>
 	/// <param name="s">The line segment.</param>
-	/// <returns>The left neighbour line segment.</returns>
+	/// <returns>The leftChild neighbour line segment.</returns>
 	Segment leftNeighbourOfSegment(Segment& s) {
 		Segment ans;
 		findLeftNeighbourSegment(getRoot(), s, ans);
@@ -130,10 +130,10 @@ public:
 	}
 
 	/// <summary>
-	/// Helper function to find the right neighbour line segment of a line segment.
+	/// Helper function to find the rightChild neighbour line segment of a line segment.
 	/// </summary>
 	/// <param name="s">The line segment.</param>
-	/// <returns>The right neighbour line segment.</returns>
+	/// <returns>The rightChild neighbour line segment.</returns>
 	Segment rightNeighbourOfSegment(Segment& s) {
 		Segment ans;
 		findRightNeighbourSegment(getRoot(), s, ans);
@@ -146,11 +146,11 @@ public:
 	/// <returns>The leftmost line segment in the Status.</returns>
 	Segment leftMostSegment() {
 		auto temp = getRoot();
-		while (temp->left) {
-			temp = temp->left;
+		while (temp->leftChild) {
+			temp = temp->leftChild;
 		}
 
-		return temp->val;
+		return temp->data;
 	}
 
 	/// <summary>
@@ -159,10 +159,10 @@ public:
 	/// <returns>The rightmost line segment in the Status.</returns>
 	Segment rightMostSegment() {
 		auto temp = getRoot();
-		while (temp->right) {
-			temp = temp->right;
+		while (temp->rightChild) {
+			temp = temp->rightChild;
 		}
 
-		return temp->val;
+		return temp->data;
 	}
 };
