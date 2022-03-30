@@ -1,0 +1,3 @@
+/Users/kkviks/Desktop/DAA/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/kkviks/Desktop/DAA/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/kkviks/Desktop/DAA/cmake-build-debug/CMakeFiles/DAA.dir
